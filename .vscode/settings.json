@@ -1,0 +1,37 @@
+{
+  "editor.insertSpaces": true,
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "eslint.format.enable": true,
+  "eslint.validate": ["javascript", "typescript"],
+  "javascript.preferences.quoteStyle": "single",
+  "javascript.suggest.completeFunctionCalls": true,
+  "javascript.autoClosingTags": false,
+  "jest.coverageFormatter": "DefaultFormatter",
+  "prettier.disableLanguages": ["javascript", "typescript", "json"],
+  "tsimporter.emitSemicolon": false,
+  "tsimporter.doubleQuotes": false,
+  "tsimporter.filesToExclude": ["dist/**/*.ts"],
+  "tsimporter.preferRelative": true,
+  "typescript.preferences.quoteStyle": "single",
+  "typescript.format.enable": true,
+  "typescript.autoClosingTags": false,
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "[json]": {
+    "editor.insertSpaces": true,
+    "editor.autoIndent": "advanced",
+    "editor.tabSize": 2,
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.suggest.insertMode": "replace",
+    "gitlens.codeLens.scopes": ["document"],
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  }
+}
