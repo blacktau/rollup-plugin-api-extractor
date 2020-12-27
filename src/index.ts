@@ -140,9 +140,14 @@ const plugin: PluginImpl<Options> = (pluginOptions = {}): Plugin => {
 
         process.exitCode = 0
       } else {
-        console.error(`API Extractor completed with ${extractorResult.errorCount} errors` +
+        if (extractorResult.errorCount > 0) {
+          console.error(`API Extractor completed with ${extractorResult.errorCount} errors` +
           ` and ${extractorResult.warningCount} warnings`)
-        process.exitCode = 1
+          process.exitCode = 1
+        } else {
+          console.error(`API Extractor completed with $${extractorResult.warningCount} warnings`)
+          process.exitCode = 0
+        }
       }
     }
   }
