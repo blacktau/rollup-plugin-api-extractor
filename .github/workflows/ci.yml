@@ -17,9 +17,8 @@ jobs:
       - name: Tests
         run: yarn test:prod
       - name: publish Coverage
-        uses: codecov/codecov-action@v1
-        with:
-          token: $({ secrets.CODECOV_TOKEN })
-          file: ./coverage/clover.xml
-          
+        timeout-minutes: 1
+        continue-on-error: true
+        run: bash <(curl -s https://codecov.io/bash) -t ${{secrets.CODECOV_TOKEN}} -B ${{ github.ref }} -f coverage/coverage-final.json
+
 
