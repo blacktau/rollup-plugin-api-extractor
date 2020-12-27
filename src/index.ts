@@ -145,7 +145,7 @@ const plugin: PluginImpl<Options> = (pluginOptions = {}): Plugin => {
           ` and ${extractorResult.warningCount} warnings`)
           process.exitCode = 1
         } else {
-          console.warn(`API Extractor completed with $${extractorResult.warningCount} warnings`)
+          console.warn(`API Extractor completed with ${extractorResult.warningCount} warnings`)
           process.exitCode = 0
         }
       }
