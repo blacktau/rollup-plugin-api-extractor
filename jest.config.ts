@@ -26,7 +26,7 @@ const config: Config.InitialOptions = {
   },
   collectCoverageFrom: ['src/**/*.{js,ts,tsx,jsx}', '!<rootDir>/node_modules/'],
   testMatch: ['<rootDir>/**/*.(spec|test).{ts,tsx,js,jsx}'],
-  watchPathIgnorePatterns: ['dist']
+  watchPathIgnorePatterns: ['tests/fixtures/.*']
 }
 
 export default config

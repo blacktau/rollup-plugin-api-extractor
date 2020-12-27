@@ -2,3 +2,5 @@ node_modules
 dist
 coverage
 *.log
+tests/**/**/output/*
+tests/**/**/temp/*

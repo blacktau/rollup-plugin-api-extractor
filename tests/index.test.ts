@@ -42,3 +42,43 @@ it('should run when given minimal configuration', async () => {
   const result = fs.readFileSync(path.resolve(__dirname, 'fixtures/minimalConfig/dist', 'index.d.ts')).toString()
   expect(result).toEqual(expected)
 })
+
+it('should run when configuration file specified', async () => {
+  const pwd = process.cwd()
+    
+  process.chdir(path.resolve(__dirname, 'fixtures/configFile/'))
+  const bundle = await rollup({
+    input: 'src/index.ts',
+    plugins: [
+      apiExtractor({
+        configFile: './api-extractor.json'
+      })
+    ]
+  })
+
+  await bundle.write(outputOptions)
+  process.chdir(pwd)
+
+  const expected = fs.readFileSync(path.resolve(__dirname, 'fixtures/configFile/', 'expected.d.ts')).toString()
+  const result = fs.readFileSync(path.resolve(__dirname, 'fixtures/configFile/dist', 'index.d.ts')).toString()
+  expect(result).toEqual(expected)
+})
+
+it('should use the default configuration file location when no configuraiton provided', async () => {
+  const pwd = process.cwd()
+    
+  process.chdir(path.resolve(__dirname, 'fixtures/defaultConfigFile/'))
+  const bundle = await rollup({
+    input: 'src/index.ts',
+    plugins: [
+      apiExtractor()
+    ]
+  })
+
+  await bundle.write(outputOptions)
+  process.chdir(pwd)
+
+  const expected = fs.readFileSync(path.resolve(__dirname, 'fixtures/defaultConfigFile/', 'expected.d.ts')).toString()
+  const result = fs.readFileSync(path.resolve(__dirname, 'fixtures/defaultConfigFile/dist', 'index.d.ts')).toString()
+  expect(result).toEqual(expected)
+})
