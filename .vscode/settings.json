@@ -7,7 +7,7 @@
   "javascript.preferences.quoteStyle": "single",
   "javascript.suggest.completeFunctionCalls": true,
   "javascript.autoClosingTags": false,
-  "jest.coverageFormatter": "DefaultFormatter",
+  "jest.coverageFormatter": "GutterFormatter",
   "prettier.disableLanguages": ["javascript", "typescript", "json"],
   "tsimporter.emitSemicolon": false,
   "tsimporter.doubleQuotes": false,

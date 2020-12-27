@@ -24,7 +24,11 @@
   "author": "Sean Garrett",
   "license": "MIT",
   "scripts": {
-    "build": "rollup -c"
+    "lint": "eslint",
+    "build": "rollup -c",
+    "test": "jest --coverage",
+    "test:prod": "yarn lint && jest --coverage",
+    "test:watch": "jest --coverage --watchAll"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.1.0",
@@ -32,7 +36,19 @@
     "@types/fs-extra": "^9.0.6",
     "@types/jest": "^26.0.19",
     "@types/node": "^14.14.16",
+    "@typescript-eslint/eslint-plugin": "^4.11.0",
+    "@typescript-eslint/parser": "^4.11.0",
+    "eslint": "^7.16.0",
+    "eslint-config-standard-with-typescript": "^19.0.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^5.0.0",
+    "jest": "^26.6.3",
     "rollup": "^2.35.1",
+    "ts-jest": "^26.4.4",
+    "ts-mockery": "^1.2.0",
+    "ts-node": "^9.1.1",
     "tslib": "^2.0.3",
     "typescript": "^4.1.3"
   },

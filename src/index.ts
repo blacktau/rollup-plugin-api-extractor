@@ -1,4 +1,4 @@
-import { NormalizedOutputOptions, PluginImpl } from 'rollup'
+import { NormalizedOutputOptions, OutputBundle, Plugin, PluginImpl } from 'rollup'
 import * as path from 'path'
 import * as fs from 'fs'
 
@@ -17,7 +17,7 @@ export interface Options {
   configFile?: string
 
   /**
-   * Configuration overrides for the the api extractor configuration. if no config file is specified and the default file does not exist all mandatory configuration sections need to be supplied here. 
+   * Configuration overrides for the the api extractor configuration. if no config file is specified and the default file does not exist all mandatory configuration sections need to be supplied here.
    */
   configuration?: Partial<IConfigFile>
 
@@ -43,37 +43,38 @@ export interface Options {
 }
 
 const cleanEmptyFoldersRecursively = (folder: string) => {
-  var isDir = fs.statSync(folder).isDirectory();
+  const isDir = fs.statSync(folder).isDirectory()
   if (!isDir) {
-    return;
+    return
   }
-  var files = fs.readdirSync(folder);
+  let files = fs.readdirSync(folder)
   if (files.length > 0) {
-    files.forEach(function(file) {
-      var fullPath = path.join(folder, file);
-      cleanEmptyFoldersRecursively(fullPath);
-    });
+    files.forEach(function (file) {
+      const fullPath = path.join(folder, file)
+      cleanEmptyFoldersRecursively(fullPath)
+    })
 
     // re-evaluate files; after deleting subfolder
     // we may have parent folder empty now
-    files = fs.readdirSync(folder);
+    files = fs.readdirSync(folder)
   }
 
-  if (files.length == 0) {
-    fs.rmdirSync(folder);
-    return;
+  if (files.length === 0) {
+    fs.rmdirSync(folder)
   }
 }
 
-const getTypings = (packageJson: any) => {
-  let types: string = packageJson['types'] ?? packageJson['typings']
+const getTypings = () => {
+  const packageFile = path.resolve('package.json')
+  const packageJson = JSON.parse(fs.readFileSync(packageFile, 'utf8'))
+  let types: string = packageJson.types ?? packageJson.typings
 
   if (types) {
     if (types.endsWith('.js')) {
       types = `${types.substr(0, -3)}.d.ts`
-    } 
+    }
   } else {
-    let main = packageJson['main']
+    const main: string = packageJson.main
     types = `${main.substr(0, -3)}.d.ts`
   }
 
@@ -81,48 +82,46 @@ const getTypings = (packageJson: any) => {
     types = 'index.d.ts'
   }
 
-  if (!fs.existsSync(path.join(__dirname, types))) {
+  if (!fs.existsSync(path.join(path.dirname(packageFile), types))) {
     throw new Error('Unable to find typings file. Is it defined in package.json?')
   }
 
   return types
 }
 
-const plugin: PluginImpl<Options> = (pluginOptions = {}) => {
-
+const plugin: PluginImpl<Options> = (pluginOptions = {}): Plugin => {
   return {
     name: 'api-extractor',
-    writeBundle: (options: NormalizedOutputOptions, bundle) => {
-
-      const apiExtractorJsonPath: string = path.join(__dirname, pluginOptions.configFile ?? './config/api-extractor.json')
+    writeBundle (options: NormalizedOutputOptions, bundle: OutputBundle) {
+      const apiExtractorJsonPath: string = path.resolve(pluginOptions.configFile ?? './config/api-extractor.json')
       const outdir = path.resolve(options.dir ?? './')
-
-      const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'))
 
       const aeConfig: IConfigFile = fs.existsSync(apiExtractorJsonPath) ? {
         ...ExtractorConfig.loadFile(apiExtractorJsonPath),
         ...pluginOptions.configuration
       } : {
-        mainEntryPointFilePath: getTypings(packageJson),
+        mainEntryPointFilePath: getTypings(),
         ...pluginOptions.configuration
       }
-     
+
+      const packageJsonPath = path.resolve('package.json')
+
       const prepareOptions: IExtractorConfigPrepareOptions = {
         configObject: aeConfig,
         configObjectFullPath: undefined,
-        packageJsonFullPath: path.resolve(__dirname, 'package.json')
+        packageJsonFullPath: packageJsonPath
       }
 
       const extractorConfig: ExtractorConfig = ExtractorConfig.prepare(prepareOptions)
-        
+
       const extractorResult: ExtractorResult = Extractor.invoke(extractorConfig,
         {
           localBuild: pluginOptions.local ?? false,
           showVerboseMessages: pluginOptions.verbose ?? false,
           showDiagnostics: pluginOptions.diagnostics ?? false,
           typescriptCompilerFolder: pluginOptions.typescriptFolder
-      })
-  
+        })
+
       if (extractorResult.succeeded) {
         if (bundle && extractorConfig.rollupEnabled) {
           const defs = Object.keys(bundle).filter((key) => key.match(/\.d\.ts/))
@@ -135,17 +134,17 @@ const plugin: PluginImpl<Options> = (pluginOptions = {}) => {
               }
             }
           })
-          
+
           cleanEmptyFoldersRecursively(outdir)
         }
 
-        process.exitCode = 0;
+        process.exitCode = 0
       } else {
-        console.error(`API Extractor completed with ${extractorResult.errorCount} errors`
-          + ` and ${extractorResult.warningCount} warnings`);
-        process.exitCode = 1;
+        console.error(`API Extractor completed with ${extractorResult.errorCount} errors` +
+          ` and ${extractorResult.warningCount} warnings`)
+        process.exitCode = 1
       }
-    } 
+    }
   }
 }
 

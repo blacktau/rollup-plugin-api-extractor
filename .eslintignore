@@ -1,0 +1,6 @@
+dist/
+docs/
+node_modules/
+.vscode/
+rollup.config.js
+jest.config.ts

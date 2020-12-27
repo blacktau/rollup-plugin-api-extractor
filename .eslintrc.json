@@ -1,0 +1,48 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "standard-with-typescript"
+  ],
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "ecmaFeatures": {
+      "arrowFunctions": true
+    }
+  },
+  "rules": {
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/strict-boolean-expressions": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "no-void": [
+      2,
+      {
+        "allowAsStatement": true
+      }
+    ],
+    "comma-dangle": ["error", "never"]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "overrides": [{
+      "files": ["tests/**/*.ts"],
+      "env": {
+        "jest": true
+      }
+    },
+    {
+      "files": ["src/**/*.ts"],
+      "env": {
+        "browser": false,
+        "worker": false,
+        "node": true,
+        "es2020": false
+      }
+    }
+  ]
+}
