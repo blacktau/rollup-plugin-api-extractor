@@ -2,24 +2,32 @@ import apiExtractor from '../src/index'
 import { OutputOptions, rollup } from 'rollup'
 import path, { join } from 'path'
 import fs from 'fs'
+import { Mock } from 'ts-mockery'
 
-const cwd = join(__dirname, 'fixtures/');
+const cwd = join(__dirname, 'fixtures/')
 const file = join(cwd, 'output/bundle.js')
 const outputOptions: OutputOptions = { file, format: 'cjs' }
+
+beforeEach(() => {
+  global.console = Mock.of<Console>({
+    warn: jest.fn(),
+    log: jest.fn()
+  })
+})
 
 it('should return a plugin named api-extractor', () => {
   const plugin = apiExtractor()
   expect(plugin.name).toBe('api-extractor')
-})  
+})
 
 it('should expose a writeBundle function', () => {
   const plugin = apiExtractor()
   expect(plugin.writeBundle).toBeInstanceOf(Function)
-})  
+})
 
 it('should run when given minimal configuration', async () => {
   const pwd = process.cwd()
-    
+
   process.chdir(path.resolve(__dirname, 'fixtures/minimalConfig/'))
   const bundle = await rollup({
     input: 'src/index.ts',
@@ -45,7 +53,7 @@ it('should run when given minimal configuration', async () => {
 
 it('should run when configuration file specified', async () => {
   const pwd = process.cwd()
-    
+
   process.chdir(path.resolve(__dirname, 'fixtures/configFile/'))
   const bundle = await rollup({
     input: 'src/index.ts',
@@ -64,9 +72,9 @@ it('should run when configuration file specified', async () => {
   expect(result).toEqual(expected)
 })
 
-it('should use the default configuration file location when no configuraiton provided', async () => {
+it('should use the default configuration file location when no configuration provided', async () => {
   const pwd = process.cwd()
-    
+
   process.chdir(path.resolve(__dirname, 'fixtures/defaultConfigFile/'))
   const bundle = await rollup({
     input: 'src/index.ts',

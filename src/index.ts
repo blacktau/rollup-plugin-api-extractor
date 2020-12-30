@@ -47,6 +47,7 @@ const cleanEmptyFoldersRecursively = (folder: string) => {
   if (!isDir) {
     return
   }
+
   let files = fs.readdirSync(folder)
   if (files.length > 0) {
     files.forEach(function (file) {
@@ -54,8 +55,6 @@ const cleanEmptyFoldersRecursively = (folder: string) => {
       cleanEmptyFoldersRecursively(fullPath)
     })
 
-    // re-evaluate files; after deleting subfolder
-    // we may have parent folder empty now
     files = fs.readdirSync(folder)
   }
 
@@ -123,6 +122,7 @@ const plugin: PluginImpl<Options> = (pluginOptions = {}): Plugin => {
         })
 
       if (extractorResult.succeeded) {
+        console.log(extractorConfig)
         if (bundle && extractorConfig.rollupEnabled) {
           const defs = Object.keys(bundle).filter((key) => key.match(/\.d\.ts/))
           defs.forEach((def) => {

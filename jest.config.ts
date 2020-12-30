@@ -7,11 +7,8 @@ const config: Config.InitialOptions = {
     ".(ts|tsx)": 'ts-jest'
   },
   transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$'],
-  testEnvironment: 'jsdom',
+  testEnvironment: 'node',
   moduleFileExtensions: ['ts', 'tsx','js', 'jsx', 'json' ],
-  globals: {
-    window: {}
-  },
   coveragePathIgnorePatterns: [
     '/node_modules/'
   ],

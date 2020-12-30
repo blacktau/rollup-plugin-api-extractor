@@ -1,1 +1,4 @@
-export const Greeting = () => 'Hello';
+/**
+ * @public
+ */
+export const Greeting = () => 'Hello'
