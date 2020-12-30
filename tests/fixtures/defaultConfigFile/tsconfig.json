@@ -19,7 +19,8 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "rootDir": "src",
-    "outDir": "dist"
+    "outDir": "dist",
+    "newLine": "lf"
   },
   "include": ["src"],
   "exclude": ["coverage", "dist", "node_modules"]
