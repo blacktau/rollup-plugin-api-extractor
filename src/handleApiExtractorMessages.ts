@@ -13,15 +13,10 @@ export const handleApiExtractorMessages = (context: PluginContext, message: Extr
     return
   }
 
-  if (message.logLevel === ExtractorLogLevel.Error) {
-    context.error(message.formatMessageWithLocation(__dirname), {
-      column: message.sourceFileColumn ?? -1,
-      line: message.sourceFileLine ?? -1
-    })
-  } else {
-    context.warn(message.formatMessageWithLocation(__dirname), {
-      column: message.sourceFileColumn ?? -1,
-      line: message.sourceFileLine ?? -1
-    })
-  }
+  const logFunc = message.logLevel === ExtractorLogLevel.Error ? context.error : context.warn
+
+  logFunc(message.formatMessageWithLocation(__dirname), {
+    column: message.sourceFileColumn ?? -1,
+    line: message.sourceFileLine ?? -1
+  })
 }

@@ -1,4 +1,4 @@
-import { ExtractorLogLevel, ExtractorMessage } from '@microsoft/api-extractor'
+import { ExtractorLogLevel, ExtractorMessage, ExtractorMessageCategory } from '@microsoft/api-extractor'
 import { PluginContext } from 'rollup'
 import { Mock } from 'ts-mockery'
 import { handleApiExtractorMessages } from '../src/handleApiExtractorMessages'
@@ -105,5 +105,30 @@ describe('handleApiExtractorMessages', () => {
         column: -1,
         line: -1
       }))
+  })
+
+  it('should ignore messages with logLevel None', () => {
+    const context = Mock.all<PluginContext>()
+    const message = Mock.of<ExtractorMessage>({
+      logLevel: ExtractorLogLevel.None
+    })
+
+    handleApiExtractorMessages(context, message)
+
+    expect(context.error).not.toHaveBeenCalled()
+    expect(context.warn).not.toHaveBeenCalled()
+  })
+
+  it('should ignore console messages with logLevel below warning', () => {
+    const context = Mock.all<PluginContext>()
+    const message = Mock.of<ExtractorMessage>({
+      logLevel: ExtractorLogLevel.Info,
+      category: ExtractorMessageCategory.Console
+    })
+
+    handleApiExtractorMessages(context, message)
+
+    expect(context.error).not.toHaveBeenCalled()
+    expect(context.warn).not.toHaveBeenCalled()
   })
 })

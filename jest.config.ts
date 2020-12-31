@@ -13,7 +13,6 @@ const config: Config.InitialOptions = {
   coveragePathIgnorePatterns: [
     '/node_modules/'
   ],
-  coverageReporters: ["json", "lcov", "text", "clover", "text-summary"],
   coverageDirectory: './coverage',
   coverageThreshold: {
     global: {
