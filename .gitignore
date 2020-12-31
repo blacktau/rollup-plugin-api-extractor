@@ -4,3 +4,4 @@ coverage
 *.log
 tests/**/**/output/*
 tests/**/**/temp/*
+*.tgz

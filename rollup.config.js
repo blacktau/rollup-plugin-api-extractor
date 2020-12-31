@@ -10,5 +10,6 @@ export default {
   },
   plugins: [
     typescript()
-  ]
+  ],
+  external: [ 'path', 'fs', '@microsoft/api-extractor' ]
 }

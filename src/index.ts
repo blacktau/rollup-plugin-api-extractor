@@ -1,16 +1,10 @@
 import { NormalizedOutputOptions, OutputBundle, Plugin, PluginImpl } from 'rollup'
-import * as path from 'path'
-import * as fs from 'fs'
+import { IConfigFile } from '@microsoft/api-extractor'
+import { getApiExtractorConfig } from './getApiExtractorConfig'
+import { invokeApiExtractor } from './invokeApiExtractor'
+import { performDtsRollupCleanup } from './performDtsRollupCleanup'
 
-import {
-  Extractor,
-  ExtractorConfig,
-  ExtractorResult,
-  IConfigFile,
-  IExtractorConfigPrepareOptions
-} from '@microsoft/api-extractor'
-
-export interface Options {
+export interface ApiExtractorPluginOptions {
   /**
    * The path to the api extractor configuration file. defaults to ./config/api-extractor.json
    */
@@ -42,115 +36,29 @@ export interface Options {
   typescriptFolder?: string
 }
 
-const cleanEmptyFoldersRecursively = (folder: string) => {
-  const isDir = fs.statSync(folder).isDirectory()
-  if (!isDir) {
-    return
-  }
-
-  let files = fs.readdirSync(folder)
-  if (files.length > 0) {
-    files.forEach(function (file) {
-      const fullPath = path.join(folder, file)
-      cleanEmptyFoldersRecursively(fullPath)
-    })
-
-    files = fs.readdirSync(folder)
-  }
-
-  if (files.length === 0) {
-    fs.rmdirSync(folder)
-  }
-}
-
-const getTypings = () => {
-  const packageFile = path.resolve('package.json')
-  const packageJson = JSON.parse(fs.readFileSync(packageFile, 'utf8'))
-  let types: string = packageJson.types ?? packageJson.typings
-
-  if (types) {
-    if (types.endsWith('.js')) {
-      types = `${types.substr(0, -3)}.d.ts`
-    }
-  } else {
-    const main: string = packageJson.main
-    types = `${main.substr(0, -3)}.d.ts`
-  }
-
-  if (!types) {
-    types = 'index.d.ts'
-  }
-
-  if (!fs.existsSync(path.join(path.dirname(packageFile), types))) {
-    throw new Error('Unable to find typings file. Is it defined in package.json?')
-  }
-
-  return types
-}
-
-const plugin: PluginImpl<Options> = (pluginOptions = {}): Plugin => {
+export const apiExtractor: PluginImpl<ApiExtractorPluginOptions> = (pluginOptions = {}): Plugin => {
   return {
     name: 'api-extractor',
     writeBundle (options: NormalizedOutputOptions, bundle: OutputBundle) {
-      const apiExtractorJsonPath: string = path.resolve(pluginOptions.configFile ?? './config/api-extractor.json')
-      const outdir = path.resolve(options.dir ?? './')
+      const aeConfig = getApiExtractorConfig(pluginOptions)
 
-      const aeConfig: IConfigFile = fs.existsSync(apiExtractorJsonPath) ? {
-        ...ExtractorConfig.loadFile(apiExtractorJsonPath),
-        ...pluginOptions.configuration
-      } : {
-        mainEntryPointFilePath: getTypings(),
-        ...pluginOptions.configuration
+      if (!aeConfig) {
+        this.error('Unable to find typings file. Is it defined in package.json?')
       }
 
-      const packageJsonPath = path.resolve('package.json')
+      const { extractorResult, extractorConfig } = invokeApiExtractor(this, aeConfig, pluginOptions)
 
-      const prepareOptions: IExtractorConfigPrepareOptions = {
-        configObject: aeConfig,
-        configObjectFullPath: undefined,
-        packageJsonFullPath: packageJsonPath
-      }
-
-      const extractorConfig: ExtractorConfig = ExtractorConfig.prepare(prepareOptions)
-
-      const extractorResult: ExtractorResult = Extractor.invoke(extractorConfig,
-        {
-          localBuild: pluginOptions.local ?? false,
-          showVerboseMessages: pluginOptions.verbose ?? false,
-          showDiagnostics: pluginOptions.diagnostics ?? false,
-          typescriptCompilerFolder: pluginOptions.typescriptFolder
-        })
-
-      if (extractorResult.succeeded) {
-        console.log(extractorConfig)
-        if (bundle && extractorConfig.rollupEnabled) {
-          const defs = Object.keys(bundle).filter((key) => key.match(/\.d\.ts/))
-          defs.forEach((def) => {
-            const defRef = bundle[def]
-            if (defRef) {
-              const fileName = path.resolve(outdir, defRef.fileName)
-              if (fileName !== extractorConfig.untrimmedFilePath) {
-                fs.unlinkSync(fileName)
-              }
-            }
-          })
-
-          cleanEmptyFoldersRecursively(outdir)
-        }
-
-        process.exitCode = 0
-      } else {
+      if (!extractorResult.succeeded) {
         if (extractorResult.errorCount > 0) {
-          console.error(`API Extractor completed with ${extractorResult.errorCount} errors` +
-          ` and ${extractorResult.warningCount} warnings`)
-          process.exitCode = 1
+          this.error(`API Extractor completed with ${extractorResult.errorCount} errors and ${extractorResult.warningCount} warnings`)
         } else {
-          console.warn(`API Extractor completed with ${extractorResult.warningCount} warnings`)
-          process.exitCode = 0
+          this.warn(`API Extractor completed with ${extractorResult.warningCount} warnings`)
         }
+
+        return
       }
+
+      performDtsRollupCleanup(bundle, extractorConfig, options)
     }
   }
 }
-
-export default plugin

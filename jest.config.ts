@@ -2,6 +2,7 @@ import type { Config } from '@jest/types'
 
 const config: Config.InitialOptions = {
   preset: 'ts-jest',
+  setupFiles: ['./jest-setup.ts'],
   clearMocks: true,
   transform: {
     ".(ts|tsx)": 'ts-jest'
@@ -23,7 +24,11 @@ const config: Config.InitialOptions = {
   },
   collectCoverageFrom: ['src/**/*.{js,ts,tsx,jsx}', '!<rootDir>/node_modules/'],
   testMatch: ['<rootDir>/**/*.(spec|test).{ts,tsx,js,jsx}'],
-  watchPathIgnorePatterns: ['tests/fixtures/.*']
+  watchPathIgnorePatterns: ['tests/fixtures/.*'],
+  rootDir: '.',
+  modulePaths: [
+    '<rootDir>'
+  ],
 }
 
 export default config
