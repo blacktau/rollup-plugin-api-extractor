@@ -1,0 +1,71 @@
+/**
+ * Config file for API Extractor.  For more info, please visit: https://api-extractor.com
+ */
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
+  "projectFolder": ".",
+  "mainEntryPointFilePath": "<projectFolder>/dist/index.d.ts",
+  "bundledPackages": [],
+
+  "compiler": {},
+  "apiReport": {
+    "enabled": true
+  },
+  "docModel": {
+    "enabled": true
+  },
+  "dtsRollup": {
+    "enabled": true,
+    "untrimmedFilePath": "<projectFolder>/dist/index.d.ts",
+  },
+  "tsdocMetadata": {},
+  "messages": {
+    "compilerMessageReporting": {
+      "default": {
+        "logLevel": "warning"
+      }
+    },
+
+    /**
+     * Configures handling of messages reported by API Extractor during its analysis.
+     *
+     * API Extractor message identifiers start with "ae-".  For example: "ae-extra-release-tag"
+     *
+     * DEFAULT VALUE: See api-extractor-defaults.json for the complete table of extractorMessageReporting mappings
+     */
+    "extractorMessageReporting": {
+      "default": {
+        "logLevel": "warning"
+        // "addToApiReportFile": false
+      }
+
+      // "ae-extra-release-tag": {
+      //   "logLevel": "warning",
+      //   "addToApiReportFile": true
+      // },
+      //
+      // . . .
+    },
+
+    /**
+     * Configures handling of messages reported by the TSDoc parser when analyzing code comments.
+     *
+     * TSDoc message identifiers start with "tsdoc-".  For example: "tsdoc-link-tag-unescaped-text"
+     *
+     * DEFAULT VALUE:  A single "default" entry with logLevel=warning.
+     */
+    "tsdocMessageReporting": {
+      "default": {
+        "logLevel": "warning"
+        // "addToApiReportFile": false
+      }
+
+      // "tsdoc-link-tag-unescaped-text": {
+      //   "logLevel": "warning",
+      //   "addToApiReportFile": true
+      // },
+      //
+      // . . .
+    }
+  }
+}
