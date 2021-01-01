@@ -25,7 +25,7 @@ Add to rollup config:
 
 ```javascript
 import typescript from "@rollup/plugin-typescript";
-import apiExtractor from "rollup-plugin-api-extractor";
+import { apiExtractor } from "rollup-plugin-api-extractor";
 
 export default [
   {
@@ -42,11 +42,11 @@ The below is based on the example at [https://api-extractor.com/pages/setup/invo
 
 Add the `typings` or `types` field to `package.json`:
 
-```json
+```jsonc
 {
-  //...
+  // ...
   "types": "lib/index.d.ts"
-  //...
+  // ...
 }
 ```
 
