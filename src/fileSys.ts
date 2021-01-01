@@ -7,5 +7,8 @@ export const fileSys = {
   resolve: (...pathSegments: string[]): string => path.resolve(...pathSegments),
   join: (...paths: string[]) => path.join(...paths),
   dirname: (p: string) => path.dirname(p),
-  unlinkSync: (path: PathLike) => fs.unlinkSync(path)
+  unlinkSync: (path: PathLike) => fs.unlinkSync(path),
+  statSync: (path: PathLike) => fs.statSync(path),
+  readdirSync: (path: PathLike) => fs.readdirSync(path),
+  rmdirSync: (path: PathLike) => fs.rmdirSync(path)
 }
