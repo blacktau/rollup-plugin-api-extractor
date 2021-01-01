@@ -42,10 +42,6 @@ export const apiExtractor: PluginImpl<ApiExtractorPluginOptions> = (pluginOption
     writeBundle (options: NormalizedOutputOptions, bundle: OutputBundle) {
       const aeConfig = getApiExtractorConfig(pluginOptions)
 
-      if (!aeConfig) {
-        this.error('Unable to find typings file. Is it defined in package.json?')
-      }
-
       const { extractorResult, extractorConfig } = invokeApiExtractor(this, aeConfig, pluginOptions)
 
       if (!extractorResult.succeeded) {

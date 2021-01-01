@@ -38,10 +38,10 @@ describe('performDtsRollupCleanup', () => {
 
     performDtsRollupCleanup(bundle, config, options)
 
-    expect(fileSys.unlinkSync).toBeCalledWith(expect.stringMatching('another.d.ts'))
     expect(fileSys.unlinkSync).not.toBeCalledWith(expect.stringMatching('untrimmedFilePath.d.ts'))
     expect(fileSys.unlinkSync).not.toBeCalledWith(expect.stringMatching('betaTrimmedFilePath.d.ts'))
     expect(fileSys.unlinkSync).not.toBeCalledWith(expect.stringMatching('publicTrimmedFilePath.d.ts'))
+    expect(fileSys.unlinkSync).toBeCalledWith(expect.stringMatching('another.d.ts'))
   })
 
   it('should not do anything if rollup is not enabled', () => {
