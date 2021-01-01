@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-api-extractor",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A rollupjs plugin for integrating with @microsoft/api-extractor",
   "keywords": [
     "rollup",
