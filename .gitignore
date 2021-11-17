@@ -5,3 +5,10 @@ coverage
 tests/**/**/output/*
 tests/**/**/temp/*
 *.tgz
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
