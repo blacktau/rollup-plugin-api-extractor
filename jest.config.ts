@@ -7,9 +7,9 @@ const config: Config.InitialOptions = {
   transform: {
     ".(ts|tsx)": 'ts-jest'
   },
-  transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$'],
+  transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(js|jsx|json)$'],
   testEnvironment: 'node',
-  moduleFileExtensions: ['ts', 'tsx','js', 'jsx', 'json' ],
+  moduleFileExtensions: ['ts', 'tsx','js', 'jsx', 'json'],
   coveragePathIgnorePatterns: [
     '/node_modules/'
   ],

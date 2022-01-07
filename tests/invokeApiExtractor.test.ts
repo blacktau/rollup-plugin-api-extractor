@@ -5,7 +5,6 @@ import { fileSys } from '../src/fileSys'
 import { ApiExtractorPluginOptions } from '../src/index'
 import { invokeApiExtractor } from '../src/invokeApiExtractor'
 import * as handleApiExtractorMessages from '../src/handleApiExtractorMessages'
-import { mocked } from 'ts-jest/utils'
 
 describe('invokeApiExtractor', () => {
   beforeEach(() => {
@@ -233,7 +232,8 @@ describe('invokeApiExtractor', () => {
 
     invokeApiExtractor(context, mockedConfigFile, mockedPluginOptions)
 
-    const parameters = mocked(Extractor.invoke).mock.calls[0]
+    
+    const parameters = jest.mocked(Extractor.invoke).mock.calls[0]
     expect(parameters?.[1]?.messageCallback).toBeDefined()
 
     if (parameters?.[1]?.messageCallback) {
