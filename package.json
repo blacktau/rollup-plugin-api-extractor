@@ -27,7 +27,7 @@
     "lint": "eslint",
     "build": "rollup -c",
     "test": "jest --coverage",
-    "test:prod": "pnpm lint && jest --coverage",
+    "test:prod": "yarn lint && jest --coverage",
     "test:watch": "jest --coverage --watchAll"
   },
   "devDependencies": {

@@ -3,14 +3,23 @@
   "editor.tabSize": 2,
   "editor.formatOnSave": true,
   "eslint.format.enable": true,
-  "eslint.validate": ["javascript", "typescript"],
+  "eslint.validate": [
+    "javascript",
+    "typescript"
+  ],
   "javascript.preferences.quoteStyle": "single",
   "javascript.suggest.completeFunctionCalls": true,
   "javascript.autoClosingTags": false,
-  "prettier.disableLanguages": ["javascript", "typescript", "json"],
+  "prettier.disableLanguages": [
+    "javascript",
+    "typescript",
+    "json"
+  ],
   "tsimporter.emitSemicolon": false,
   "tsimporter.doubleQuotes": false,
-  "tsimporter.filesToExclude": ["dist/**/*.ts"],
+  "tsimporter.filesToExclude": [
+    "dist/**/*.ts"
+  ],
   "tsimporter.preferRelative": true,
   "typescript.preferences.quoteStyle": "single",
   "typescript.format.enable": true,
@@ -24,7 +33,9 @@
       "strings": true
     },
     "editor.suggest.insertMode": "replace",
-    "gitlens.codeLens.scopes": ["document"],
+    "gitlens.codeLens.scopes": [
+      "document"
+    ],
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
   "[typescript]": {
@@ -32,5 +43,11 @@
   },
   "[javascript]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-  }
+  },
+  "search.exclude": {
+    "**/.yarn": true,
+    "**/.pnp.*": true
+  },
+  "eslint.nodePath": ".yarn/sdks",
+  "typescript.tsdk": ".yarn/sdks/typescript/lib"
 }
