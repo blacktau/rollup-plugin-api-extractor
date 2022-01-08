@@ -15,7 +15,8 @@ jobs:
         with:
           version: latest
           run_install: true
-      - run: pnpm test:prod      - name: publish Coverage
+      - run: pnpm test:prod      
+      - name: publish Coverage
         timeout-minutes: 1
         continue-on-error: true
         run: bash <(curl -s https://codecov.io/bash) -B ${{ github.ref }} -f coverage/coverage-final.json
