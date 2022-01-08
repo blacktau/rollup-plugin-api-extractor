@@ -4720,6 +4720,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "rollup-plugin-api-extractor@workspace:."
   dependencies:
+    "@jest/types": ^27.4.2
     "@microsoft/api-extractor": ^7.19.0
     "@rollup/plugin-typescript": ^8.3.0
     "@rollup/pluginutils": ^4.1.2
