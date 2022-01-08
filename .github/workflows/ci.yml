@@ -15,7 +15,7 @@ jobs:
         with:
           version: latest
           run_install: true
-      - run: pnpm test:prod      
+      - run: pnpm test:prod
       - name: publish Coverage
         timeout-minutes: 1
         continue-on-error: true
@@ -33,7 +33,8 @@ jobs:
       - uses: pnpm/action-setup@v2.0.1
         with:
           version: latest
-          run_install: true      - name: Build
+          run_install: true
+      - name: Build
         run: pnpm build
       - name: Publish
         run: pnpm publish
