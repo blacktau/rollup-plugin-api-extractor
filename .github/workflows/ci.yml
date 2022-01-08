@@ -5,14 +5,17 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [16.x, 17.x]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - run: yarn
-      - run: yarn test:prod
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: latest
+          run_install: true
+      - run: pnpm test:prod
       - name: publish Coverage
         timeout-minutes: 1
         continue-on-error: true
@@ -25,14 +28,16 @@ jobs:
       - uses: actions/checkout@master
       - uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 16
           registry-url: https://registry.npmjs.org/
-      - name: Install packages
-        run: yarn
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: latest
+          run_install: true
       - name: Build
-        run: yarn build
+        run: pnpm build
       - name: Publish
-        run: yarn publish
+        run: pnpm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
   create-release:
