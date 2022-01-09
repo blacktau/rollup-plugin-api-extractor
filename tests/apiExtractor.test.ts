@@ -104,7 +104,7 @@ describe('apiExtractor', () => {
       expect(mappedPlugin.warn).toHaveBeenCalledWith('API Extractor completed with 5 warnings')
     })
 
-    it('should run a dts clean up if extraction succeeded', () => {
+    it('should run a dts clean up if extraction succeeded and clean up is not specified.', () => {
       Mock.staticMethod(aecModule, 'getApiExtractorConfig', () => Mock.of<IConfigFile>())
       Mock.staticMethod(pdrcModule, 'performDtsRollupCleanup', jest.fn())
       Mock.staticMethod(iaeModule, 'invokeApiExtractor', () => {
@@ -129,6 +129,64 @@ describe('apiExtractor', () => {
       }
 
       expect(pdrcModule.performDtsRollupCleanup).toHaveBeenCalled()
+    })
+
+    it('should run a dts clean up if extraction succeeded and clean up is true.', () => {
+      Mock.staticMethod(aecModule, 'getApiExtractorConfig', () => Mock.of<IConfigFile>())
+      Mock.staticMethod(pdrcModule, 'performDtsRollupCleanup', jest.fn())
+      Mock.staticMethod(iaeModule, 'invokeApiExtractor', () => {
+        return {
+          extractorResult: Mock.of<ExtractorResult>({
+            succeeded: true
+          }),
+          extractorConfig: Mock.of<ExtractorConfig>()
+        }
+      })
+
+      const pluginOptions = Mock.of<ApiExtractorPluginOptions>({
+        cleanUpRollup: true
+      })
+      const plugin = apiExtractor(pluginOptions)
+      const outputOptions = Mock.all<NormalizedOutputOptions>()
+      const outputBundle = Mock.all<OutputBundle>()
+
+      const context = Mock.all<PluginContext>()
+      const mappedPlugin = Object.assign(context, plugin)
+
+      if (mappedPlugin.writeBundle) {
+        void mappedPlugin.writeBundle(outputOptions, outputBundle)
+      }
+
+      expect(pdrcModule.performDtsRollupCleanup).toHaveBeenCalled()
+    })
+
+    it('should not run a dts clean up if extraction succeeded and clean up is false.', () => {
+      Mock.staticMethod(aecModule, 'getApiExtractorConfig', () => Mock.of<IConfigFile>())
+      Mock.staticMethod(pdrcModule, 'performDtsRollupCleanup', jest.fn())
+      Mock.staticMethod(iaeModule, 'invokeApiExtractor', () => {
+        return {
+          extractorResult: Mock.of<ExtractorResult>({
+            succeeded: true
+          }),
+          extractorConfig: Mock.of<ExtractorConfig>()
+        }
+      })
+
+      const pluginOptions = Mock.of<ApiExtractorPluginOptions>({
+        cleanUpRollup: false
+      })
+      const plugin = apiExtractor(pluginOptions)
+      const outputOptions = Mock.all<NormalizedOutputOptions>()
+      const outputBundle = Mock.all<OutputBundle>()
+
+      const context = Mock.all<PluginContext>()
+      const mappedPlugin = Object.assign(context, plugin)
+
+      if (mappedPlugin.writeBundle) {
+        void mappedPlugin.writeBundle(outputOptions, outputBundle)
+      }
+
+      expect(pdrcModule.performDtsRollupCleanup).not.toHaveBeenCalled()
     })
   })
 })

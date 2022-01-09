@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-api-extractor",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "A rollupjs plugin for integrating with @microsoft/api-extractor",
   "keywords": [
     "rollup",
@@ -10,7 +10,7 @@
     "@types"
   ],
   "main": "dist/index.js",
-  "types": "dits/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],

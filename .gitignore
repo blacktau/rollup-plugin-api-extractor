@@ -12,3 +12,4 @@ tests/**/**/temp/*
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+temp/*

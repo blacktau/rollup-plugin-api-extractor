@@ -8,30 +8,30 @@ export const performDtsRollupCleanup = (bundle: OutputBundle, extractorConfig: E
     return
   }
 
-  const outdir = fileSys.resolve(options.dir ?? './')
+  const outDir = fileSys.resolve(options.dir ?? './')
 
   const outDefs: string[] = []
 
-  pushIfDefined(extractorConfig.untrimmedFilePath, outdir, outDefs)
-  pushIfDefined(extractorConfig.betaTrimmedFilePath, outdir, outDefs)
-  pushIfDefined(extractorConfig.publicTrimmedFilePath, outdir, outDefs)
+  pushIfDefined(extractorConfig.untrimmedFilePath, outDir, outDefs)
+  pushIfDefined(extractorConfig.betaTrimmedFilePath, outDir, outDefs)
+  pushIfDefined(extractorConfig.publicTrimmedFilePath, outDir, outDefs)
 
   Object.keys(bundle).filter((key) => key.match(/\.d\.ts/)).forEach((def) => {
     const defRef = bundle[def]
 
     if (defRef) {
-      const fileName = fileSys.resolve(outdir, defRef.fileName)
+      const fileName = fileSys.resolve(outDir, defRef.fileName)
       if (!outDefs.includes(fileName)) {
         fileSys.unlinkSync(fileName)
       }
     }
   })
 
-  removeEmptyFolders(outdir)
+  removeEmptyFolders(outDir)
 }
 
-const pushIfDefined = (filePath: string | undefined, outdir: string, outDefs: string[]) => {
+const pushIfDefined = (filePath: string | undefined, outDir: string, outDefs: string[]) => {
   if (filePath) {
-    outDefs.push(fileSys.resolve(outdir, filePath))
+    outDefs.push(fileSys.resolve(outDir, filePath))
   }
 }

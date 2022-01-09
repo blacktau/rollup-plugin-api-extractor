@@ -4,6 +4,10 @@ import { getApiExtractorConfig } from './getApiExtractorConfig'
 import { invokeApiExtractor } from './invokeApiExtractor'
 import { performDtsRollupCleanup } from './performDtsRollupCleanup'
 
+/**
+ * Configuration options for the RollupJs ApiExtractor plugin
+ * @public
+ */
 export interface ApiExtractorPluginOptions {
   /**
    * The path to the api extractor configuration file. defaults to ./config/api-extractor.json
@@ -11,7 +15,8 @@ export interface ApiExtractorPluginOptions {
   configFile?: string
 
   /**
-   * Configuration overrides for the the api extractor configuration. if no config file is specified and the default file does not exist all mandatory configuration sections need to be supplied here.
+   * Configuration overrides for the the api extractor configuration.
+   * if no config file is specified and the default file does not exist all mandatory configuration sections need to be supplied here.
    */
   configuration?: Partial<IConfigFile>
 
@@ -31,11 +36,23 @@ export interface ApiExtractorPluginOptions {
   diagnostics?: boolean
 
   /**
-   * Override the typescript version that api-extractor uses. see [api-extractor documantation for more information])(https://api-extractor.com/pages/commands/api-extractor_run/)
+   * Override the typescript version that api-extractor uses.
+   * @see [api-extractor documentation for more information])(https://api-extractor.com/pages/commands/api-extractor_run/)
    */
   typescriptFolder?: string
+
+  /**
+   * when true deletes the left over .d.ts files following the rollup. defaults to true.
+   */
+  cleanUpRollup?: boolean
 }
 
+/**
+ * adds \@microsoft/api-extractor to you rollupjs pipeline.
+ * @public
+ * @param pluginOptions - The configuration options for the rollupjs plugin {@link ApiExtractorPluginOptions}
+ * @returns the api-extractor plugin function
+ */
 export const apiExtractor: PluginImpl<ApiExtractorPluginOptions> = (pluginOptions = {}): Plugin => {
   return {
     name: 'api-extractor',
@@ -54,7 +71,9 @@ export const apiExtractor: PluginImpl<ApiExtractorPluginOptions> = (pluginOption
         return
       }
 
-      performDtsRollupCleanup(bundle, extractorConfig, options)
+      if (pluginOptions.cleanUpRollup ?? true) {
+        performDtsRollupCleanup(bundle, extractorConfig, options)
+      }
     }
   }
 }

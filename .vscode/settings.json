@@ -46,5 +46,10 @@
   "typescript.tsdk": "./node_modules/typescript/lib",
   "jest.testExplorer": {
     "enabled": false
-  }
+  },
+  "cSpell.words": [
+    "pluginutils",
+    "pnpm",
+    "rollupjs"
+  ]
 }
