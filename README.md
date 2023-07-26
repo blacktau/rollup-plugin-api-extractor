@@ -30,7 +30,7 @@ import { apiExtractor } from "rollup-plugin-api-extractor";
 export default [
   {
     input: "src/index.ts",
-    output: [(dir: "dist"), (format: "esm")],
+    output: [{ dir: "dist", format: "esm", sourcemap: true }],
     plugins: [typescript(), apiExtractor()],
   },
 ];
@@ -71,6 +71,7 @@ yarn api-extractor init
 Update the generated `api-extractor.json` so that `mainEntryPointFilePath` matches the `typings`/`types` field in `package.json`
 
 ```json
+"projectFolder": ".",
 "mainEntryPointFilePath": "<projectFolder>/lib/index.d.ts",
 ```
 
@@ -78,12 +79,12 @@ If `api-extractor.json` is not in the `config` folder update the `apiExtractor()
 
 ```javascript
 import typescript from "@rollup/plugin-typescript";
-import apiExtractor from "rollup-plugin-api-extractor";
+import { apiExtractor } from "rollup-plugin-api-extractor";
 
 export default [
   {
     input: "src/index.ts",
-    output: [(dir: "dist"), (format: "esm")],
+    output: [{ dir: "dist", format: "esm", sourcemap: true }],
     plugins: [
       typescript(),
       apiExtractor({
@@ -113,12 +114,12 @@ As mentioned above, the plugin can take the `@microsoft/api-extractor` configura
 
 ```javascript
 import typescript from "@rollup/plugin-typescript";
-import apiExtractor from "rollup-plugin-api-extractor";
+import { apiExtractor } from "rollup-plugin-api-extractor";
 
 export default [
   {
     input: "src/index.ts",
-    output: [(dir: "dist"), (format: "esm")],
+    output: [{ dir: "dist", format: "esm", sourcemap: true }],
     plugins: [
       typescript(),
       apiExtractor({
