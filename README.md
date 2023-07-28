@@ -1,5 +1,7 @@
 # rollup-plugin-api-extractor
 
+I'm am archiving this project as I have not been able to get it to work with the latest version of `@microsoft/api-extractor` and `rollup`. I have not had the time to investigate why and I'm not sure when I will. If you are interested in taking over the project, please let me know.
+
 ![Build Status](https://github.com/blacktau/rollup-plugin-api-extractor/workflows/CI%20Pipeline/badge.svg)
 [![codecov](https://codecov.io/gh/blacktau/rollup-plugin-api-extractor/branch/main/graph/badge.svg?token=O1NDBJ7V2K)](https://codecov.io/gh/blacktau/rollup-plugin-api-extractor)
 
